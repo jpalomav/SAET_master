@@ -252,7 +252,7 @@ Next picture shows the workflow to run SAET in the most convenient way. The reco
 * Process or reprocess any previously downloaded image, changing the needed parameters according to the user's needs by running the script "sp_processing_run.py".
 
 <p align="center">
-     <img src="https://github.com/jpalomav/SAET_master/blob/main/doc/images/run_modes.jpg">
+     <img src="https://github.com/jpalomav/SAET_master/blob/main/doc/images/run_workflow.jpg">
 </p>
 
 ## 6. OUTPUTS<a name="id6"> </a><small>[(index)](#id0)</small>
