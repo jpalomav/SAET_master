@@ -99,7 +99,6 @@ The folder SAET contains the following files and subfolders:
       * sentinel2_grid.shp. Shapefile including Sentinel-2 footprints (based on the .kml file https://sentinels.copernicus.eu/web/sentinel/missions/sentinel-2/data-products).
       * map_director.qgz. Project file for QGIS with the three previous .shp files. It is useful for planning the process of downloading scenes.
       * SAET.pdf. Document explaining the tool.
-      * roi.geojson. File in geojson format containing an example of ROI (region of interest) to be used for searching scenes. To make easier the creation of this file (if it is needed) you can visit this website: https://geojson.io
 
 -	search_data. Folder containing the output files after running the "searching" algorithm. There are two type of files: .html files, for the visualization of the image quicklooks, and .txt files containing the metadata of the found images. These text files will be used as input in the download process.
 
