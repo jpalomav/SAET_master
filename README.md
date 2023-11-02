@@ -311,7 +311,6 @@ SAET has been developed in python and has been tested for the python version 3.9
 |     Numpy    |     1.21.2    |     Numeric   package    |
 |     Matplotlib    |     3.4.3    |     Visualization   library    |
 |     GDAL    |     3.3.1    |     Geospatial   Data Abstraction Library for raster geospatial data formats.    |
-|     Sentinelsat    |     1.1.0    |     Library   to access the Copernicus Open Data Hub servers    |
 |     Shapely    |     1.7.1    |     Library   to manage shapefiles    |
 |     Pyshp    |     2.1.3    |     Library   to manage shapefiles    |
 |     Scikit-image    |     0.18.3    |     Image   processing library    |
