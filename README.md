@@ -324,7 +324,7 @@ The easier way to install SAET to avoid conflicts with other libraries already i
 
 ## Virtual environment creation and installation of SAET (recommended)
 
-**Note:** You can find a detailed document in this [step-by-step pdf](https://github.com/jpalomav/SAET-Pro/blob/main/doc/tutorials/saet_pro_installation_step_by_step.pdf)
+**Note:** You can find a detailed document in this [step-by-step pdf](https://github.com/jpalomav/SAET-Pro/blob/main/doc/saet_pro_installation_step_by_step.pdf)
 
 Once you have installed python (for example in “c:\python397_64”), follow the next steps (on Windows):
 1. Open a command prompt window.
