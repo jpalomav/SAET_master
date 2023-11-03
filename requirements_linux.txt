@@ -1,0 +1,12 @@
+python-dateutil==2.2.8
+requests==2.26.0
+tqdm==4.62.2
+numpy==1.21.2
+matplotlib==3.4.3
+./gdal_python_wheels/GDAL-3.4.1-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.whl
+Shapely==1.7.1
+pyshp==2.1.3
+scikit-image==0.18.3
+scikit-learn==1.0.2
+scipy==1.7.1
+networkx==2.6.2

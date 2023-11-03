@@ -1,0 +1,43 @@
+SAET incorporates de following libraries or languages under their respective licenses:
+
+- python-dateutil. Licensed under the Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+
+- requests. Under Apache License 2.0 (compatible with GNU)
+
+- tqdm. Under MIT license. Copyright (c) 2013 noamraph (https://raw.githubusercontent.com/tqdm/tqdm/master/LICENCE)
+
+- Numpy. Under BSD License.
+
+- Matplotlib. Under BSD License.
+ 
+- Landsatxplore. Under MIT license. Copyright (c) 2018 Yann Forget. (https://github.com/yannforget/landsatxplore/blob/master/LICENSE.txt)
+  This library has been modified to work with Landsat-9 imagery. The modified library code is stored locally in the landsatxplore2 folder,
+  so it is not necessary to download and install this library from the official python repository.  
+
+- NetworkX 2.6.2 under BSD License “Copyright (C) 2004-2021, NetworkX Developers
+
+   Aric Hagberg <hagberg@lanl.gov>
+
+   Dan Schult <dschult@colgate.edu>
+
+   Pieter Swart <swart@lanl.gov>
+
+   All rights reserved.”
+
+(https://github.com/networkx/networkx/blob/main/LICENSE.txt)
+
+- shapely 1.7.1 under BSD – 3 clause License "Copyright (c) 2007, Sean C. Gillies; All rights reserved." (https://github.com/shapely/shapely/blob/main/LICENSE)
+
+
+- pyshp 2.1.3 under Mit license "Copyright © 2013 Joel Lawhead". (https://github.com/GeospatialPython/pyshp/blob/master/LICENSE.TXT)
+
+
+- GDAL 3.3.1- GDAL/OGR is licensed under an MIT/X style license (https://gdal.org/license.html ); All rights reserved
+
+
+- Scipy 1.7.1 under BSD – 3 clause License "Copyright (c) 2001-2002 Enthought, Inc.  2003-2019, SciPy Developers. All rights reserved." (https://github.com/scipy/scipy/blob/master/LICENSE.txt)
+
+
+- Scikit-image 0.18.3 under BSD  - 3 clause License "Copyright (C) 2019, the scikit-image team; All rights reserved." (https://github.com/scikit-image/scikit-image/blob/main/LICENSE.txt)
+
+- scikit-learn 1.0.2  under BSD  - 3 clause License "Copyright (c) 2007-2021 The scikit-learn developers." (https://github.com/scikit-learn/scikit-learn/blob/main/COPYING)

@@ -1,0 +1,4 @@
+Automatic installation using the 'pip' command
+
+pip install -r requirements_windows.txt
+pip install -r requirements_linux.txt
