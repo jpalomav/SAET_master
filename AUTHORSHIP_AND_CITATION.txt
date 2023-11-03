@@ -1,0 +1,15 @@
+SAET (Shoreline Analysis and Extraction Tool). V1.0 (2021)
+Author: Geo-Environmental Cartography and Remote Sensing Group (CGAT). 
+Universitat Politecnica de Valencia (Spain). October 2021.
+https://cgat.webs.upv.es/
+
+This open source software, distributed under GNU license, is Copyright of
+UPV and has been developed within the framework of the European 
+ECFAS project by the following authors: 
+Jesus Palomar Vazquez, Jaime Almonacid Caballer, Josep E. Pardo Pascual and 
+Carlos Cabezas Rabadan.
+
+How to cite SAET:
+
+J. Palomar-Vázquez, J. Almonacid-Caballer, J.E. Pardo-Pascual and C. Cabezas-Rabadán (2021).
+SAET (V 1.0). Open source code. Universitat Politècnica de València. http://www.upv.es/es.ECFAS project (GA 101004211) 
