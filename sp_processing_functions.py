@@ -560,7 +560,7 @@ def rasterizeShapefile(input_shp, output_raster, raster_template, bc):
     new_raster_ds.SetGeoTransform(geot)
     new_raster_ds.SetProjection(prj)
     # filter by beach code if needed
-    if bc is None:
+    if bc == '(NONE)':
         gdal.RasterizeLayer(new_raster_ds, [1], lyr)
     else:
         lyr.SetAttributeFilter("BEACH_CODE IN "+bc)

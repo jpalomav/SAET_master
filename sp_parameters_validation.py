@@ -239,7 +239,7 @@ def checkCommandArgummentsProcessing(args):
                 logging.warning('Invalid format for beach code filter.')
                 sys.exit(1)
     else:
-        bc = 'NONE'
+        bc = ['NONE']
 
     # convert beach code list in string with tuple format
     query = '('
