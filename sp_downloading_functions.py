@@ -24,8 +24,8 @@ from sp_parameters_validation import esaAuthentication, usgsAuthentication
 
 def parseNumberProductsS2(np, scene_list):
     pattern_1 = '*'
-    pattern_2 = r'^(?:[1-9]\d*|0)(?:,[1-9]\d*|0)*$'
-    pattern_3 = r'^[1-9]\d*-[1-9]\d*$'
+    pattern_2 = r'^\d{0,9}(?:,\d{0,9})*$'
+    pattern_3 = r'^\d{0,9}-\d{0,9}$'
     scene_list = list(scene_list.values())
     if np == pattern_1:
         return scene_list
@@ -33,9 +33,17 @@ def parseNumberProductsS2(np, scene_list):
         np_list = [int(n) for n in np.split(',')]
         filtered_scenes = [scene_list[i]
                            for i in np_list if i >= 0 and i <= len(scene_list)]
-        return filtered_scenes
+        out_of_range = [i
+                        for i in np_list if i > len(scene_list)]
+        if len(out_of_range) > 0:
+            logging.warning('Some image number is out of range.')
+            logging.warning(out_of_range)
+            sys.exit(1)
     if re.match(pattern_3, np):
         np_tmp = [int(n) for n in np.split('-')]
+        if np_tmp[0] > len(scene_list) or np_tmp[1] > len(scene_list):
+            logging.warning('Scene range incorrect'+'\n')
+            sys.exit(1)
         if np_tmp[0] > np_tmp[1]:
             np_list = list(range(np_tmp[1], np_tmp[0]+1))
         else:
@@ -43,7 +51,7 @@ def parseNumberProductsS2(np, scene_list):
         filtered_scenes = [scene_list[i]
                            for i in np_list if i >= 0 and i <= len(scene_list)]
         return filtered_scenes
-    logging.warning('Incorrect format: (* / 0,2,3 / [2-5])'+'\n')
+    logging.warning('Incorrect format: (* / 0,2,3 / 2-5)'+'\n')
     sys.exit(1)
 
 
@@ -101,7 +109,7 @@ def filterScenesS2ToDownload(scene_list):
         print(
             f"{[i]} Scene: {scene['name']} Cloud coverage: {scene['cloud_cover']} {scene['days_off']} days")
     print('')
-    np = input('Number of images to be downloaded (* / 0,2,3 / [2-5])?: ')
+    np = input('Number of images to be downloaded (* / 0,2,3 / 2-5)?: ')
     filtered_scenes = parseNumberProductsS2(np, scene_list)
     return filtered_scenes
 
@@ -158,51 +166,70 @@ def downloadSingleBandS2(url, band_name, session, output_folder, product_name):
             progress.update(len(data))
 
 
+def checkS2ZipFile(zip_path):
+    try:
+        zfile = zipfile.ZipFile(zip_path)
+        return True
+    except zipfile.BadZipFile as ex:
+        return False
+
+
 def unZippingS2Safe(zip_path):
     #print('Unzipping... '+zip_path)
     output_folder = os.path.dirname(zip_path)
     if 'MSIL1C' in zip_path:
-        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-            for file_info in zip_ref.infolist():
-                if ('IMG_DATA' in file_info.filename) and (file_info.filename.endswith('.jp2')):
-                    # print(file_info.filename)
-                    with zip_ref.open(file_info.filename) as source_file:
-                        target_file_path = os.path.join(
-                            output_folder, os.path.basename(file_info.filename))
-                        with open(target_file_path, 'wb') as target_file:
-                            shutil.copyfileobj(source_file, target_file)
-                if 'QI_DATA' in file_info.filename:
-                    if 'MSK_CLASSI_B00' in file_info.filename:
+        if checkS2ZipFile(zip_path):
+            with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                for file_info in zip_ref.infolist():
+                    if ('IMG_DATA' in file_info.filename) and (file_info.filename.endswith('.jp2')):
                         # print(file_info.filename)
                         with zip_ref.open(file_info.filename) as source_file:
                             target_file_path = os.path.join(
                                 output_folder, os.path.basename(file_info.filename))
                             with open(target_file_path, 'wb') as target_file:
                                 shutil.copyfileobj(source_file, target_file)
-                    if 'MSK_CLOUDS_B00' in file_info.filename:
-                        # print(file_info.filename)
-                        with zip_ref.open(file_info.filename) as source_file:
-                            target_file_path = os.path.join(
-                                output_folder, os.path.basename(file_info.filename))
-                            with open(target_file_path, 'wb') as target_file:
-                                shutil.copyfileobj(source_file, target_file)
+                    if 'QI_DATA' in file_info.filename:
+                        if 'MSK_CLASSI_B00' in file_info.filename:
+                            # print(file_info.filename)
+                            with zip_ref.open(file_info.filename) as source_file:
+                                target_file_path = os.path.join(
+                                    output_folder, os.path.basename(file_info.filename))
+                                with open(target_file_path, 'wb') as target_file:
+                                    shutil.copyfileobj(
+                                        source_file, target_file)
+                        if 'MSK_CLOUDS_B00' in file_info.filename:
+                            # print(file_info.filename)
+                            with zip_ref.open(file_info.filename) as source_file:
+                                target_file_path = os.path.join(
+                                    output_folder, os.path.basename(file_info.filename))
+                                with open(target_file_path, 'wb') as target_file:
+                                    shutil.copyfileobj(
+                                        source_file, target_file)
+        else:
+            logging.warning(
+                f'Bad Zip File: {os.path.basename(zip_path)}.'+'\n')
+
     if 'MSIL2A' in zip_path:
-        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-            for file_info in zip_ref.infolist():
-                if ('R20m' in file_info.filename) and (file_info.filename.endswith('.jp2')):
-                    # print(file_info.filename)
-                    with zip_ref.open(file_info.filename) as source_file:
-                        target_file_path = os.path.join(
-                            output_folder, os.path.basename(file_info.filename))
-                        with open(target_file_path, 'wb') as target_file:
-                            shutil.copyfileobj(source_file, target_file)
-                if ('R10m' in file_info.filename) and ('_B08_' in file_info.filename):
-                    # print(file_info.filename)
-                    with zip_ref.open(file_info.filename) as source_file:
-                        target_file_path = os.path.join(
-                            output_folder, os.path.basename(file_info.filename))
-                        with open(target_file_path, 'wb') as target_file:
-                            shutil.copyfileobj(source_file, target_file)
+        if checkS2ZipFile(zip_path):
+            with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                for file_info in zip_ref.infolist():
+                    if ('R20m' in file_info.filename) and (file_info.filename.endswith('.jp2')):
+                        # print(file_info.filename)
+                        with zip_ref.open(file_info.filename) as source_file:
+                            target_file_path = os.path.join(
+                                output_folder, os.path.basename(file_info.filename))
+                            with open(target_file_path, 'wb') as target_file:
+                                shutil.copyfileobj(source_file, target_file)
+                    if ('R10m' in file_info.filename) and ('_B08_' in file_info.filename):
+                        # print(file_info.filename)
+                        with zip_ref.open(file_info.filename) as source_file:
+                            target_file_path = os.path.join(
+                                output_folder, os.path.basename(file_info.filename))
+                            with open(target_file_path, 'wb') as target_file:
+                                shutil.copyfileobj(source_file, target_file)
+        else:
+            logging.warning(
+                f'Bad Zip File: {os.path.basename(zip_path)}.'+'\n')
 
     os.remove(zip_path, dir_fd=None)
 
@@ -289,20 +316,28 @@ def downloadS2CDSE(run_parameters):
             scene_list = json.load(txt)
 
         # authentication
-        access_token = esaAuthentication(
-            run_parameters['user_esa'], run_parameters['pass_esa'])
+        # access_token = esaAuthentication(
+        #     run_parameters['user_esa'], run_parameters['pass_esa'])
 
         # # Establish session
-        session = requests.Session()
-        headers = {"Authorization": f"Bearer {access_token}"}
-        session.headers.update(headers)
-        #session.headers["Authorization"] = f"Bearer {access_token}"
+        # session = requests.Session()
+        # headers = {"Authorization": f"Bearer {access_token}"}
+        # session.headers.update(headers)
 
         # selection of scenes to be downloaded
         scene_list = filterScenesS2ToDownload(
             scene_list)  # list of dictionaries
 
         for scene in scene_list:
+            # authentication for each scene to avoid server cuts
+            access_token = esaAuthentication(
+                run_parameters['user_esa'], run_parameters['pass_esa'])
+
+            # # Establish session
+            session = requests.Session()
+            headers = {"Authorization": f"Bearer {access_token}"}
+            session.headers.update(headers)
+
             product_identifier = scene['id']
             product_name = scene['name']
             if single_bands:
@@ -361,20 +396,28 @@ def downloadS2CDSE2(run_parameters):
         with open(txt_file, 'r') as txt:
             scene_list = json.load(txt)
 
-        # authentication
-        access_token = esaAuthentication(
-            run_parameters['user_esa'], run_parameters['pass_esa'])
+        # # authentication
+        # access_token = esaAuthentication(
+        #     run_parameters['user_esa'], run_parameters['pass_esa'])
 
-        # # Establish session and authentication
-        session = requests.Session()
-        headers = {"Authorization": f"Bearer {access_token}"}
-        session.headers.update(headers)
+        # # # Establish session and authentication
+        # session = requests.Session()
+        # headers = {"Authorization": f"Bearer {access_token}"}
+        # session.headers.update(headers)
 
         # selection of scenes to be downloaded
         scene_list = filterScenesS2ToDownload(
             scene_list)  # list of dictionaries
 
         for scene in scene_list:
+            # authentication
+            access_token = esaAuthentication(
+                run_parameters['user_esa'], run_parameters['pass_esa'])
+
+            # # Establish session and authentication
+            session = requests.Session()
+            headers = {"Authorization": f"Bearer {access_token}"}
+            session.headers.update(headers)
             product_identifier = scene['id']
             product_name = scene['name']
             url = f"{zipper_odata_url}/Products({product_identifier})/$value"
@@ -396,7 +439,7 @@ def filterScenesLandsatToDownload(scene_list):
         print(
             f"{[int(key)]} Scene: {value['display_id']} Cloud coverage: {value['cloud_cover']} {value['days_off']} days")
     print('')
-    np = input('Number of images to be downloaded (* / 0,2,3 / [2-5])?: ')
+    np = input('Number of images to be downloaded (* / 0,2,3 / 2-5)?: ')
     filtered_scenes = parseNumberProductsS2(np, scene_list)
     return filtered_scenes
 
