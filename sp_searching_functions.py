@@ -289,16 +289,21 @@ def searchS2CDSE(run_parameters):
                 sys.exit(1)
             else:
                 for item in scene_info:
-                    # print(item['GeoFootprint']['coordinates'][0])
-                    scenes[item['Id']] = {'id': item['Id'],
-                                          'name': item['Name'],
-                                          'online': item['Online'],
-                                          'quicklook': item['Assets'][0]['DownloadLink'],
-                                          'corners': len(item['GeoFootprint']['coordinates'][0])}
-                    for attribute in item["Attributes"]:
-                        if attribute['Name'] == 'cloudCover':
-                            scenes[item['Id']]['cloud_cover'] = attribute['Value']
-                            break
+                    if len(item['Assets']) != 0:
+                        # print(item['GeoFootprint']['coordinates'][0])
+                        scenes[item['Id']] = {'id': item['Id'],
+                                              'name': item['Name'],
+                                              'online': item['Online'],
+                                              'quicklook': item['Assets'][0]['DownloadLink'],
+                                              'corners': len(item['GeoFootprint']['coordinates'][0])}
+                        for attribute in item["Attributes"]:
+                            if attribute['Name'] == 'cloudCover':
+                                scenes[item['Id']
+                                       ]['cloud_cover'] = attribute['Value']
+                                break
+                    else:
+                        logging.warning(
+                            'Image S2 '+item['Name'].split('.SAFE')[0]+' -> Not preview available.'+'\n')
                 if sentinel_overlap == 1:
                     for key, value in scenes.items():
                         if scenes[key]['corners'] == 5:
