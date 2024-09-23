@@ -39,6 +39,7 @@ def parseNumberProductsS2(np, scene_list):
             logging.warning('Some image number is out of range.')
             logging.warning(out_of_range)
             sys.exit(1)
+        return filtered_scenes
     if re.match(pattern_3, np):
         np_tmp = [int(n) for n in np.split('-')]
         if np_tmp[0] > len(scene_list) or np_tmp[1] > len(scene_list):
